@@ -31,13 +31,13 @@ It's the name that comes after "/" in the URL. You can either define another one
 
 Be careful, the HSQLDB default embedded DBMS __is not reliable for production use__, so we recommend that you rather use an external DBMS such as MySQL.
 
-Start iceScrum with HSQLDB on Linux:
-```
+* Start iceScrum with HSQLDB on Linux:
+```console
 docker run --name icescrum -v /mycomputer/icescrum/home:/root -p 8080:8080 icescrum/icescrum
 ```
 
-Start iceScrum with HSQLDB on OS X / Windows / docker-machine:
-```
+* Start iceScrum with HSQLDB on OS X / Windows / docker-machine:
+```console
 docker run --name icescrum -e ICESCRUM_HOST=ipOfYourDockerHost -v /mycomputer/icescrum/home:/root -p 8080:8080 icescrum/icescrum
 ```
 
@@ -73,28 +73,29 @@ At first startup you will need to provide a password for the `postgre` user.
 
 The iceScrum PostgreSQL image is just a standard PostgreSQL image that creates an `icescrum` database with the `en_US.UTF-8` encoding at the first startup.
 
-Start PostgreSQL on Linux, its data is persisted on your computer into `/mycomputer/icescrum/postgres` (replace by an absolute or relative path from your computer):
-```
+* Start PostgreSQL on Linux, its data is persisted on your computer into `/mycomputer/icescrum/postgres` (replace by an absolute or relative path from your computer):
+
+```console
 docker run --name postgres -v /mycomputer/icescrum/postgres:/var/lib/postgresql/data --net=is_network -e POSTGRES_PASSWORD=myPass -d icescrum/postgres
 ```
 
-On OS X / Windows / docker-machine __mounting a volume from your OS will not work__, see https://github.com/docker-library/postgres/issues/28, so you will need to keep the PostgreSQL data inside the container. Use the command:
+* On OS X / Windows / docker-machine __mounting a volume from your OS will not work__, see https://github.com/docker-library/postgres/issues/28, so you will need to keep the PostgreSQL data inside the container. Use the command:
 
-```
+```console
 docker run --name postgres --net=is_network -e POSTGRES_PASSWORD=myPass -d icescrum/postgres
 ```
 
 ### 3. Start the iceScrum container
 
-Start iceScrum with MySQL / PostgreSQL on Linux:
+* Start iceScrum with MySQL / PostgreSQL on Linux:
 
-```
+```console
 docker run --name icescrum -v /mycomputer/icescrum/home:/root --net=is_network -p 8080:8080 icescrum/icescrum
 ```
 
-Start iceScrum with MySQL / PostgreSQL on OS X / Windows / docker-machine:
+* Start iceScrum with MySQL / PostgreSQL on OS X / Windows / docker-machine:
 
-```
+```console
 docker run --name icescrum -e ICESCRUM_HOST=ipOfYourDockerHost -v /mycomputer/icescrum/home:/root --net=is_network -p 8080:8080 icescrum/icescrum
 ```
 
