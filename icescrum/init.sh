@@ -4,7 +4,13 @@ if [ "$ICESCRUM_HTTPS" ]; then protocol="https"; else protocol="http"; fi
 
 if [ -z "$ICESCRUM_HOST" ]; then host="localhost"; else host="$ICESCRUM_HOST"; fi
 
-if [ -z "$ICESCRUM_PORT" ]; then port="8080"; else port="$ICESCRUM_PORT"; fi
+if [ -z "$ICESCRUM_PORT" ]; then
+    port=":8080"
+elif [ "$ICESCRUM_PORT" = "80" ] || ([ "$ICESCRUM_PORT" = "443" ] && [ "$protocol" = "https" ]); then
+    port=""
+else
+    port=":$ICESCRUM_PORT"
+fi
 
 if [ -z "$ICESCRUM_CONTEXT" ]; then
     context="/icescrum"
@@ -17,7 +23,7 @@ else
     warName="$ICESCRUM_CONTEXT"
 fi
 
-url="${protocol}://${host}:${port}${context}"
+url="${protocol}://${host}${port}${context}"
 CATALINA_OPTS="$CATALINA_OPTS -Dicescrum.serverURL=$url"
 CATALINA_OPTS="$CATALINA_OPTS -Dicescrum.environment=docker"
 export CATALINA_OPTS
