@@ -16,13 +16,15 @@ If you don't want or cannot expose iceScrum on this URL, our image supports envi
 Pass one or more environment variables to the iceScrum container by adding to the `docker run` command the `-e VARIABLE=value` argument.
 
 ### `ICESCRUM_HTTPS`
-If set, the protocol will be `https` instead of `http` in the URL. Be careful: this is all that this variables does, it does not configure the SSL connection at all.
+If set to `true`, the protocol will be `https` instead of `http` in the URL. Be careful: this is all that this variables does, it does not configure the SSL connection at all.
 
 ### `ICESCRUM_HOST`
 __Required if you use docker-machine, e.g. to use Docker on OS X or Windows__, in such case set the IP of your Docker host, provided by `docker-machine ip yourmachine`.
 
 ### `ICESCRUM_PORT`
 The iceScrum Docker image will always have iceScrum running on its internal port `8080`, but nothing prevents you from defining a different external port (e.g. by exposing a different port in `docker run` via the `-p` argument).
+
+If you set the port `443` (if `ICESCRUM_HTTPS` is set) or the port `80` then the port will be omitted in the URL.
 
 ### `ICESCRUM_CONTEXT`
 It's the name that comes after "/" in the URL. You can either define another one or provide `/` to have an empty context.
