@@ -15,21 +15,21 @@ If you don't want or cannot expose iceScrum on this URL, our image supports envi
 
 Pass one or more environment variables to the iceScrum container by adding to the `docker run` command the `-e VARIABLE=value` argument.
 
-### `ICESCRUM_HTTPS`
+#### `ICESCRUM_HTTPS`
 If set to `true`, the protocol will be `https` instead of `http` in the URL. Be careful: this is all that this variables does, it does not configure the SSL connection at all.
 
-### `ICESCRUM_HOST`
+#### `ICESCRUM_HOST`
 __Required if you use docker-machine, e.g. to use Docker on OS X or Windows__, in such case set the IP of your Docker host, provided by `docker-machine ip yourmachine`.
 
-### `ICESCRUM_PORT`
+#### `ICESCRUM_PORT`
 The iceScrum Docker image will always have iceScrum running on its internal port `8080`, but nothing prevents you from defining a different external port (e.g. by exposing a different port in `docker run` via the `-p` argument).
 
 If you set the port `443` (if `ICESCRUM_HTTPS` is set) or the port `80` then the port will be omitted in the URL.
 
-### `ICESCRUM_CONTEXT`
+#### `ICESCRUM_CONTEXT`
 It's the name that comes after "/" in the URL. You can either define another one or provide `/` to have an empty context.
 
-## Start with the embedded HSQLDB database (not safe)
+## Start with included HSQLDB database (not safe)
 
 Be careful, the HSQLDB default embedded DBMS __is not reliable for production use__, so we recommend that you rather use an external DBMS such as MySQL.
 
@@ -62,7 +62,6 @@ docker network create --driver bridge is_net
 The iceScrum MySQL image is just a standard MySQL image that creates an database named `icescrum` with the `utf8_general_ci` collation at the first startup.
 
 At first startup you will need to provide a password for the MySQL `root` user.
-
 ```
 docker run --name mysql -v /mycomputer/is/mysql:/var/lib/mysql --net=is_net -e MYSQL_ROOT_PASSWORD=myPass -d icescrum/mysql
 ```
@@ -80,7 +79,6 @@ At first startup you will need to provide a password for the `postgre` user.
 docker run --name postgres -v /mycomputer/is/postgres:/var/lib/postgresql/data --net=is_net -e POSTGRES_PASSWORD=myPass -d icescrum/postgres
 ```
 * On OS X / Windows / docker-machine __mounting a volume from your OS will not work__, see https://github.com/docker-library/postgres/issues/28, so you will need to keep the PostgreSQL data inside the container. Use the command:
-
 ```console
 docker run --name postgres --net=is_net -e POSTGRES_PASSWORD=myPass -d icescrum/postgres
 ```
@@ -178,7 +176,6 @@ services:
       - /mycomputer/is/mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=myPass
-
   icescrum:
     image: icescrum/icescrum
     ports:
