@@ -33,12 +33,12 @@ It's the name that comes after "/" in the URL. You can either define another one
 
 Be careful, the HSQLDB default embedded DBMS __is not reliable for production use__, so we recommend that you rather use an external DBMS such as MySQL.
 
-* Start iceScrum with HSQLDB on Linux:
+#### Start iceScrum with HSQLDB on Linux:
 ```console
 docker run --name icescrum -v /mycomputer/is/home:/root -p 8080:8080 icescrum/icescrum
 ```
 
-* Start iceScrum with HSQLDB on OS X / Windows / docker-machine:
+#### Start iceScrum with HSQLDB on OS X / Windows / docker-machine:
 ```console
 docker run --name icescrum -e ICESCRUM_HOST=yourDockerHostIP -v /mycomputer/is/home:/root -p 8080:8080 icescrum/icescrum
 ```
@@ -57,7 +57,7 @@ docker network create --driver bridge is_net
 
 ### 2. Start the DB container (pick one!)
 
-* __MySQL__
+#### MySQL
 
 The iceScrum MySQL image is just a standard MySQL image that creates an database named `icescrum` with the `utf8_general_ci` collation at the first startup.
 
@@ -69,18 +69,16 @@ docker run --name mysql -v /mycomputer/is/mysql:/var/lib/mysql --net=is_net -e M
 
 MySQL data is persisted on your computer into `/mycomputer/is/mysql` (replace by an absolute or relative path from your computer).
 
-* __PostgreSQL__
+#### PostgreSQL
 
 The iceScrum PostgreSQL image is just a standard PostgreSQL image that creates an `icescrum` database with the `en_US.UTF-8` encoding at the first startup.
 
 At first startup you will need to provide a password for the `postgre` user.
 
 * Start PostgreSQL on Linux, its data is persisted on your computer into `/mycomputer/is/postgres` (replace by an absolute or relative path from your computer):
-
 ```console
 docker run --name postgres -v /mycomputer/is/postgres:/var/lib/postgresql/data --net=is_net -e POSTGRES_PASSWORD=myPass -d icescrum/postgres
 ```
-
 * On OS X / Windows / docker-machine __mounting a volume from your OS will not work__, see https://github.com/docker-library/postgres/issues/28, so you will need to keep the PostgreSQL data inside the container. Use the command:
 
 ```console
@@ -90,13 +88,10 @@ docker run --name postgres --net=is_net -e POSTGRES_PASSWORD=myPass -d icescrum/
 ### 3. Start the iceScrum container
 
 * Start iceScrum with MySQL / PostgreSQL on Linux:
-
 ```console
 docker run --name icescrum -v /mycomputer/is/home:/root --net=is_net -p 8080:8080 icescrum/icescrum
 ```
-
 * Start iceScrum with MySQL / PostgreSQL on OS X / Windows / docker-machine:
-
 ```console
 docker run --name icescrum -e ICESCRUM_HOST=yourDockerHostIP -v /mycomputer/is/home:/root --net=is_net -p 8080:8080 icescrum/icescrum
 ```
@@ -120,23 +115,23 @@ Then iceScrum should be available at the provided URL.
 If it's the first time you use iceScrum, you will have to configure iceScrum through a user-friendly wizard. Here is the documentation: https://www.icescrum.com/documentation/install-guide/#settings
 
 The setup wizard has two results:
-- A `config.groovy` file located under `/mycomputer/is/home/.icescrum`, which you will be able to edit later either manually or through the iceScrum Pro admin interface.
-- An admin user for iceScrum in the target database.
+* A `config.groovy` file located under `/mycomputer/is/home/.icescrum`, which you will be able to edit later either manually or through the iceScrum Pro admin interface.
+* An admin user for iceScrum in the target database.
 
 Some settings regarding where iceScrum stores its files are prefilled to ensure that everything is persisted in your mounted volume, don't change them unless you know what you do!
 
 The wizard has a "Dabatase" step:
 
-* __HSQLDB__
+#### HSQLDB
 
 If you want to keep the HSQLDB database then the database configuration is prefilled and you can just click next.
 
-* __MySQL__
+#### MySQL
 
 If you use the MySQL container, choose the MySQL database in the settings and configure it:
-- _URL_: replace "localhost" by the name of the MySQL container (in our example: `mysql`)
-- _Username_: `root`
-- _Password_: the one defined when starting the MySQL container (in our example: `myPass`)
+* _URL_: replace "localhost" by the name of the MySQL container (in our example: `mysql`)
+* _Username_: `root`
+* _Password_: the one defined when starting the MySQL container (in our example: `myPass`)
 
 When clicking on next, a database connection is tried and if you get no error then it is successful.
 
@@ -145,12 +140,12 @@ You will be told to restart the container at the very end of the setup so iceScr
 docker restart icescrum
 ```
 
-* __PostgreSQL__
+#### PostgreSQL
 
 If you use the PostgreSQL container, choose the PostgreSQL database in the settings and configure it:
-- _URL_: replace "localhost" by the name of the PostgreSQL container (in our example: `postgres`)
-- _Username_: `postgres`
-- _Password_: the one defined when starting the PostgreSQL container (in our example: `myPass`)
+* _URL_: replace "localhost" by the name of the PostgreSQL container (in our example: `postgres`)
+* _Username_: `postgres`
+* _Password_: the one defined when starting the PostgreSQL container (in our example: `myPass`)
 
 When clicking on next, a database connection is tried and if you get no error then it is successful.
 
