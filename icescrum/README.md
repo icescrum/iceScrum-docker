@@ -33,12 +33,11 @@ It's the name that comes after "/" in the URL. You can either define another one
 
 Be careful, the HSQLDB default embedded DBMS __is not reliable for production use__, so we recommend that you rather use an external DBMS such as MySQL.
 
-#### Start iceScrum with HSQLDB on Linux:
+* Start iceScrum with HSQLDB on Linux:
 ```console
 docker run --name icescrum -v /mycomputer/is/home:/root -p 8080:8080 icescrum/icescrum
 ```
-
-#### Start iceScrum with HSQLDB on OS X / Windows / docker-machine:
+* Start iceScrum with HSQLDB on OS X / Windows / docker-machine:
 ```console
 docker run --name icescrum -e ICESCRUM_HOST=yourDockerHostIP -v /mycomputer/is/home:/root -p 8080:8080 icescrum/icescrum
 ```
@@ -184,6 +183,36 @@ services:
       - /mycomputer/is/home:/root
     links:
       - mysql
+```
+
+## Examples
+
+__Start MySQL and iceScrum on a new `mynet` Docker network on Linux__
+```console
+docker network create --driver bridge mynet
+docker run --name mysql -v ~/docker-is/mysql:/var/lib/mysql --net=mynet -e MYSQL_ROOT_PASSWORD=secretPass -d icescrum/mysql
+docker run --name icescrum -v ~/docker-is/home:/root -p 8080:8080 --net=mynet icescrum/icescrum
+```
+
+__Start iceScrum with HSLQDB on OS X on port 8090 by retrieving the docker-machine default VM IP automatically__
+```console
+docker run --name icescrum                               \
+           -e ICESCRUM_HOST=$(docker-machine ip default) \
+           -e ICESCRUM_PORT=8090                         \
+           -v ~/docker-is/home:/root                     \
+           -p 8090:8080                                  \
+           icescrum/icescrum
+```
+
+__Start iceScrum with HSLQDB on URL http://scrum.mydomain.com__
+```console
+docker run --name icescrum                     \
+           -e ICESCRUM_HOST=scrum.mydomain.com \
+           -e ICESCRUM_CONTEXT=/               \
+           -e ICESCRUM_PORT=80                 \
+           -v ~/docker-is/home:/root           \
+           -p 80:8080                          \
+           icescrum/icescrum
 ```
 
 ## Information
