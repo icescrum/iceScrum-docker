@@ -16,8 +16,7 @@ RUN wget -O /icescrum/icescrum.war https://www.icescrum.com/downloads/icescrum.w
 
 WORKDIR $CATALINA_HOME
 
-RUN rm -rf webapps/*
-RUN rm -f lib/tomcat-jdbc.jar
+RUN rm -rf webapps/* lib/tomcat-jdbc.jar
 COPY server.xml conf/server.xml
 
 # The initial . here is important to source env variables from init.sh
