@@ -5,7 +5,7 @@ This is the official iceScrum Docker image, with support for recent Docker versi
 iceScrum is an open-minded and expert agile project management tool based on the Scrum methodology: https://www.icescrum.com/features/.
 
 Tags:
-- iceScrum R6#14.10: `latest`
+- iceScrum R6#14.11: `latest`
 
 ## Environment variables
 
