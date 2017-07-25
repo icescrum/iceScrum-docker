@@ -4,8 +4,11 @@ This is the official iceScrum Docker image, with support for recent Docker versi
 
 iceScrum is an open-minded and expert agile project management tool based on the Scrum methodology: https://www.icescrum.com/features/.
 
+__The R6 version of iceScrum will be deprecated soon. Use this image only to upgrade an existing installation and prepare it for the migration to iceScrum v7.__ Migration documentation: https://www.icescrum.com/documentation/migration-standalone/
+
 Tags:
-- iceScrum R6#14.11: `latest`
+- iceScrum v7: `latest`
+- iceScrum R6#14.14: `R6`
 
 ## Linux, Windows and OS X
 

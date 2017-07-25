@@ -12,7 +12,7 @@ ENV CATALINA_OUT /root/logs/catalina.out
 COPY init.sh /icescrum/init.sh
 RUN chmod 755 /icescrum/init.sh
 
-RUN wget -O /icescrum/icescrum.war https://www.icescrum.com/downloads/icescrum.war
+RUN wget -O /icescrum/icescrum.war https://www.icescrum.com/downloads/iceScrumPro_R6_14.14.war
 
 WORKDIR $CATALINA_HOME
 
