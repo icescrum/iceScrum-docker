@@ -1,23 +1,14 @@
-FROM tomcat:7-jre7
+FROM openjdk:8u131-jre
 MAINTAINER iceScrum Team <support@kagilum.com>
 
-ENV CATALINA_OPTS -Duser.timezone=UTC           \
-                  -Xmx512m                      \
-                  -XX:MaxPermSize=256m          \
-                  -Djava.awt.headless=true      \
-                  -Dicescrum.log.dir=/root/logs/ \
-                  -server
-ENV CATALINA_OUT /root/logs/catalina.out
+ENV JAVA_OPTS -Xmx1024m -Dicescrum.log.dir=/root/logs/ -Dicescrum.environment=docker
 
-COPY init.sh /icescrum/init.sh
-RUN chmod 755 /icescrum/init.sh
+# Anything done in root cannot be done in Dockerfile since root will be mounted to a host directory at runtime
+COPY startup.sh /icescrum/startup.sh
+RUN chmod 755 /icescrum/startup.sh
 
-RUN wget -O /icescrum/icescrum.war https://www.icescrum.com/downloads/icescrum.war
+RUN wget -O /icescrum/icescrum.jar https://www.icescrum.com/downloads/v7/icescrum.jar
 
-WORKDIR $CATALINA_HOME
+WORKDIR /icescrum
 
-RUN rm -rf webapps/* lib/tomcat-jdbc.jar
-COPY server.xml conf/server.xml
-
-# The initial . here is important to source env variables from init.sh
-CMD . /icescrum/init.sh && bin/startup.sh && tail -f /root/logs/catalina.out
+CMD ./startup.sh

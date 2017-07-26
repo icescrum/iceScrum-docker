@@ -1,60 +1,60 @@
 # iceScrum official Docker image
 
-This is the official iceScrum Docker image, with support for recent Docker versions.
-
 iceScrum is an open-minded and expert agile project management tool based on the Scrum methodology: https://www.icescrum.com/features/.
 
+__The R6 version of iceScrum will be deprecated soon. Use the R6 image only to upgrade an existing installation and prepare it for the migration to iceScrum v7.__ To migrate, follow this documentation: https://www.icescrum.com/documentation/migration-standalone/.
+
 Tags:
-- iceScrum R6#14.11: `latest`
+- iceScrum 7.0.6: `latest`
+- iceScrum R6#14.14: `R6` (documentation: https://github.com/icescrum/iceScrum-docker/blob/R6/icescrum/README.md)
 
-## Linux, Windows and OS X
+## iceScrum URL
 
-However, the configuration varies depending on the type of installation:
-- __Docker Native__: regular Linux install, Docker for Windows or Docker for Mac applications.
-- __Docker Machine__: manual Docker Machine install or Docker Toolbox on Windows and OS X.
+When iceScrum runs inside a Docker container, it cannot know its external URL. By default it looks like `http://<docker-host>:<external-port>/icescrum`.
 
-Docker Machine, usually via Docker Toolbox, used to be the only way to install iceScrum on Windows and OS X. In such case, the Docker Host is a VM which is not available on `localhost` so __the iceScrum default configuration doesn't work and it needs to be changed by using environment variables__ as described in the next section. The new native applications solves this issue by allowing starting Docker on `localhost`.
+If you use a VM (e.g. Docker Machine) the docker host is the VM IP, otherwise it's `localhost` or your machine IP.
 
-## Environment variables
+There is no `https` support for the moment for this Docker image.
 
-__Important notice:__ iceScrum must know beforehand the unique external URL that will be used to open it in a browser. By default, this URL is `http://localhost:8080/icescrum`.
+### Port
 
-If you don't want or cannot expose iceScrum on this URL, our image supports environment variables to define a custom URL.
+Internally, iceScrum will start on port `8080`. You need to map this internal port to a port of your computer in order to use iceScrum from your computer.
 
-Pass one or more environment variables to the iceScrum container by adding to the `docker run` command the `-e VARIABLE=value` argument.
+As a reminder, here is how you map a port when starting a container: add `-p external-port:internal-port` to the docker run` command.
 
-#### `ICESCRUM_HTTPS`
-If set to `true`, the protocol will be `https` instead of `http` in the URL. Be careful: this is all that this variables does, it does not configure the SSL connection at all.
+Ensure that `external-port` is available on your computer, e.g. `8080` or `8090`.
 
-#### `ICESCRUM_HOST`
-__Required if you use [Docker Machine](#linux-windows-and-os-x)__, in such case set the IP of your Docker host, provided by `docker-machine ip yourmachine`.
+If you map port `80` of your computer to port `8080` of the container (`-p 80:8080`) then the port can be omitted in the URL. This requires administration permissions.
 
-#### `ICESCRUM_PORT`
-The iceScrum Docker image will always have iceScrum running on its internal port `8080`, but nothing prevents you from defining a different external port (e.g. by exposing a different port in `docker run` via the `-p` argument).
+### Context
 
-If you set the port `443` (if `ICESCRUM_HTTPS` is set) or the port `80` then the port will be omitted in the URL.
+If you don't want that the URL ends with `/icescrum`, which is the iceScrum context, then you can change it by setting an environment variable.
 
-#### `ICESCRUM_CONTEXT`
-It's the name that comes after "/" in the URL. You can either define another one or provide `/` to have an empty context.
+As a reminder, here is how you set an environment variable when starting a container: add `-e VARIABLE=value` to the `docker run` command.
 
-## Start with included HSQLDB database (not safe)
+The environment variable that defines the context is `ICESCRUM_CONTEXT`, e.g.:
+* `-e ICESCRUM_CONTEXT=is`: the URL ends with `/is`
+* `-e ICESCRUM_CONTEXT=/`: the URL ends with `/`
 
-Be careful, the HSQLDB default embedded DBMS __is not reliable for production use__, so we recommend that you rather use an external DBMS such as MySQL.
+## iceScrum persistent files
 
-* Start iceScrum with HSQLDB on [Docker Native](#linux-windows-and-os-x):
+No persistent data should be kept inside the container and iceScrum needs a place to persist its files. That's why you need to mount a directory of your computer into a directory of the container: `/root`.
+
+As a reminder, here is how you mount a volume when starting a container: add `-v external-directory:internal-directory` to the `docker run` command.
+
+## Start with included H2 database (not safe)
+
 ```console
 docker run --name icescrum -v /mycomputer/is/home:/root -p 8080:8080 icescrum/icescrum
 ```
-* Start iceScrum with HSQLDB on [Docker Machine](#linux-windows-and-os-x):
-```console
-docker run --name icescrum -e ICESCRUM_HOST=yourDockerHostIP -v /mycomputer/is/home:/root -p 8080:8080 icescrum/icescrum
-```
 
-The iceScrum data (config.groovy, logs...) is persisted on your computer into `/mycomputer/is/home` (replace by an absolute or relative path from your computer) and the HSQLDB files are stored under its `hsqldb` directory.
+The iceScrum data (config.groovy, logs...) is persisted on your computer into `/mycomputer/is/home` (replace by an absolute or relative path from your computer) and the H2 files are stored under its `h2` directory.
+
+Be careful, the H2 default embedded DBMS __is not reliable for production use__, so we recommend that you rather use an external DBMS such as MySQL.
 
 ## Start with MySQL or PostgreSQL
 
-This integration makes use of the Docker "networks"" feature, we chose to not use the "link"" feature that seems to be deprecated. Starting both containers on the same network simply allows iceScrum to access your MySQL or PostgreSQL container by its name thanks to an automatic `/etc/hosts` entry.
+This connection requires using Docker networks. Starting both containers on the same network allows iceScrum to access your MySQL or PostgreSQL container by its name (thanks to an automatic `/etc/hosts` entry).
 
 ### 1. Create the network
 
@@ -73,7 +73,7 @@ At first startup you will need to provide a password for the MySQL `root` user.
 docker run --name mysql -v /mycomputer/is/mysql:/var/lib/mysql --net=is_net -e MYSQL_ROOT_PASSWORD=myPass -d icescrum/mysql
 ```
 
-MySQL data is persisted on your computer into `/mycomputer/is/mysql` (replace by an absolute or relative path from your computer).
+MySQL data is persisted on your computer into `/mycomputer/is/mysql` (replace by an absolute or relative path from your computer). This may not work properly on `Docker Machine` due to permission issues unrelated to iceScrum.
 
 #### PostgreSQL
 
@@ -81,55 +81,35 @@ The iceScrum PostgreSQL image is just a standard PostgreSQL image that creates a
 
 At first startup you will need to provide a password for the `postgre` user.
 
-* Start PostgreSQL on [Docker Native](#linux-windows-and-os-x), its data is persisted on your computer into `/mycomputer/is/postgres` (replace by an absolute or relative path from your computer):
 ```console
 docker run --name postgres -v /mycomputer/is/postgres:/var/lib/postgresql/data --net=is_net -e POSTGRES_PASSWORD=myPass -d icescrum/postgres
 ```
-* On [Docker Machine](#linux-windows-and-os-x) __mounting a volume from your OS will not work__, see https://github.com/docker-library/postgres/issues/28, so you will need to keep the PostgreSQL data inside the container. Use the command:
-```console
-docker run --name postgres --net=is_net -e POSTGRES_PASSWORD=myPass -d icescrum/postgres
-```
+
+PostgreSQL data is persisted on your computer into `/mycomputer/is/postgres` (replace by an absolute or relative path from your computer). This may not work properly on `Docker Machine` due to permission issues unrelated to iceScrum.
 
 ### 3. Start the iceScrum container
 
-* Start iceScrum with MySQL / PostgreSQL on [Docker Native](#linux-windows-and-os-x):
 ```console
 docker run --name icescrum -v /mycomputer/is/home:/root --net=is_net -p 8080:8080 icescrum/icescrum
 ```
-* Start iceScrum with MySQL / PostgreSQL on [Docker Machine](#linux-windows-and-os-x):
-```console
-docker run --name icescrum -e ICESCRUM_HOST=yourDockerHostIP -v /mycomputer/is/home:/root --net=is_net -p 8080:8080 icescrum/icescrum
-```
-
-Don't start it in background so you will be able to check that everything goes well in the logs.
 
 iceScrum data (`config.groovy`, logs...) is persisted on your computer into `/mycomputer/is/home` (replace by an absolute or relative path from your computer).
 
-## Startup
-
-The very first line of the iceScrum container output displays the external URL of iceScrum (according to the provided environment variables):
-> iceScrum will be available at this URL: http://XXXX
-
-Wait until your see 
-> Server startup in XXXX ms
-
-Then iceScrum should be available at the provided URL.
-
 ## Setup wizard
 
-If it's the first time you use iceScrum, you will have to configure iceScrum through a user-friendly wizard. Here is the documentation: https://www.icescrum.com/documentation/install-guide/#settings
+If it's the first time you use iceScrum, you will have to configure iceScrum through a user-friendly wizard. Here is the documentation: https://www.icescrum.com/documentation/how-to-install-icescrum/#settings
 
 The setup wizard has two results:
 * A `config.groovy` file located under `/mycomputer/is/home/.icescrum`, which you will be able to edit later either manually or through the iceScrum Pro admin interface.
 * An admin user for iceScrum in the target database.
 
-Some settings regarding where iceScrum stores its files are prefilled to ensure that everything is persisted in your mounted volume, don't change them unless you know what you do!
+Settings that define where iceScrum stores its files are prefilled to ensure that everything is persisted in your mounted volume, don't change them unless you know what you do!
 
 The wizard has a "Dabatase" step:
 
-#### HSQLDB
+#### H2
 
-If you want to keep the HSQLDB database then the database configuration is prefilled and you can just click next.
+If you want to keep the H2 database then the database configuration is prefilled and you can just click next.
 
 #### MySQL
 
@@ -164,11 +144,8 @@ docker restart icescrum
 To migrate from one database to another:
 
 1. Export the projects you want to keep from the running iceScrum application (project > export).
-
 2. Stop the iceScrum container.
-
-3. Change the DB configuration manually in the `config.groovy` file stored on your computer in the directory you defined, see https://www.icescrum.com/documentation/config-groovy-file/#database. If you come from HSQLDB, you can alternatively delete the `hsqldb` directory so the setup wizard will show up again on next startup.
-
+3. Change the DB configuration manually in the `config.groovy` file stored on your computer in the directory you defined, see https://www.icescrum.com/documentation/config-groovy/#database.
 4. Start the iceScrum container and import your projects (project > import).
 
 ## Docker Compose
@@ -195,36 +172,23 @@ services:
 
 ## Examples
 
-__Start MySQL and iceScrum on a new `mynet` Docker network on [Docker Native](#linux-windows-and-os-x)__
+__Start MySQL and iceScrum on a new `mynet` Docker network on URL http://<docker-host>:8080/icescrum__
 ```console
 docker network create --driver bridge mynet
-docker run --name mysql -v ~/docker-is/mysql:/var/lib/mysql --net=mynet -e MYSQL_ROOT_PASSWORD=secretPass -d icescrum/mysql
-docker run --name icescrum -v ~/docker-is/home:/root -p 8080:8080 --net=mynet icescrum/icescrum
+docker run --name mysql    -v ~/docker-is/mysql:/var/lib/mysql    --net=mynet -e MYSQL_ROOT_PASSWORD=secretPass -d icescrum/mysql
+docker run --name icescrum -v ~/docker-is/home:/root              --net=mynet -p 8080:8080                         icescrum/icescrum
 ```
 
-__Start iceScrum with HSLQDB on [Docker Machine](#linux-windows-and-os-x) on port 8090 by retrieving the "default" VM IP automatically__
+__Start iceScrum with H2 on URL http://<docker-host>:8090/icescrum__
 ```console
-docker run --name icescrum                               \
-           -e ICESCRUM_HOST=$(docker-machine ip default) \
-           -e ICESCRUM_PORT=8090                         \
-           -v ~/docker-is/home:/root                     \
-           -p 8090:8080                                  \
-           icescrum/icescrum
+docker run --name icescrum -v ~/docker-is/home:/root -p 8090:8080 icescrum/icescrum
 ```
 
-__Start iceScrum with HSLQDB on URL http://scrum.mydomain.com__
+__Start iceScrum with H2 on URL http://<docker-host>__
 ```console
-docker run --name icescrum                     \
-           -e ICESCRUM_HOST=scrum.mydomain.com \
-           -e ICESCRUM_CONTEXT=/               \
-           -e ICESCRUM_PORT=80                 \
-           -v ~/docker-is/home:/root           \
-           -p 80:8080                          \
-           icescrum/icescrum
+docker run --name icescrum -v ~/docker-is/home:/root -p 80:8080 -e ICESCRUM_CONTEXT=/ icescrum/icescrum
 ```
 
 ## Information
 
-The iceScrum Docker image is maintained by the company who develops iceScrum: __Kagilum__. More information on our website: https://www.icescrum.com/.
-
-We would like to thank Caner Candan who was the first to develop and maintain an iceScrum docker image!
+The iceScrum Docker image is maintained by the behind iceScrum: __Kagilum__. More information on our website: https://www.icescrum.com/.
