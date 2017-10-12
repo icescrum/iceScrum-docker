@@ -9,6 +9,8 @@ RUN chmod 755 /icescrum/startup.sh
 
 RUN wget -O /icescrum/icescrum.jar https://www.icescrum.com/downloads/v7/icescrum.jar
 
+RUN chmod 775 /icescrum && chmod 775 /root
+
 WORKDIR /icescrum
 
 CMD ./startup.sh
