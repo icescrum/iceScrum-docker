@@ -18,8 +18,8 @@ else
     fi
 
     log_file="/root/logs/catalina.out"
-    if [ ! -f "log_file" ]; then
-        touch log_file
+    if [ ! -f "$log_file" ]; then
+        touch "$log_file"
     fi
 
     if [ -z "$ICESCRUM_CONTEXT" ]; then context="icescrum"; else context="$ICESCRUM_CONTEXT"; fi
