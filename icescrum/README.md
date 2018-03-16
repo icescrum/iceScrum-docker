@@ -5,7 +5,7 @@ iceScrum is an open-minded and expert agile project management tool based on the
 __The R6 version of iceScrum will be deprecated soon. Use the R6 image only to upgrade an existing installation and prepare it for the migration to iceScrum v7.__ To migrate, follow this documentation: https://www.icescrum.com/documentation/migration-standalone/.
 
 Tags:
-- iceScrum 7.11: `latest`
+- iceScrum 7.12: `latest`
 - iceScrum R6#14.14: `R6` (documentation: https://github.com/icescrum/iceScrum-docker/blob/R6/icescrum/README.md)
 
 ## iceScrum URL
