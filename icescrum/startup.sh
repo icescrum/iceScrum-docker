@@ -23,7 +23,8 @@ else
     fi
 
     if [ -z "$ICESCRUM_CONTEXT" ]; then context="icescrum"; else context="$ICESCRUM_CONTEXT"; fi
+    if [ "$ICESCRUM_HTTPS_PROXY" == "true" ]; then httpsProxy="httpsProxy=true"; else httpsProxy=""; fi
 
-    java -jar $JAVA_OPTS icescrum.jar host=localhost context=$context >> $log_file 2>&1 &
+    java -jar $JAVA_OPTS icescrum.jar host=localhost context=$context $httpsProxy >> $log_file 2>&1 &
     tail -n0 -f $log_file
 fi

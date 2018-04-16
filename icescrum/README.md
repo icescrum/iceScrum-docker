@@ -14,7 +14,16 @@ When iceScrum runs inside a Docker container, it cannot know its external URL. B
 
 If you use a VM (e.g. Docker Machine) the docker host is the VM IP, otherwise it's `localhost` or your machine IP.
 
-There is no `https` support for the moment for this Docker image.
+### HTTPS through reverse proxy
+
+Starting from iceScrum 7.15, you can configure secured connections to an iceScrum Docker container through a reverse proxy such as Apache or Nginx. In such case, you need to inform iceScrum that it will be used externally through HTTPS.
+
+The environment variable to do so is ICESCRUM_HTTPS_PROXY: 
+`-e ICESCRUM_HTTPS_PROXY=true`
+
+That is the only thing you have to do on the iceScrum side. However, you need to configure the reverse proxy properly so it works with iceScrum, as explained in the documentation provided on our website.
+
+As an alternative, you could define the HTTPS connection directly on the .jar, thus avoiding the need to install a reverse proxy. This feature is still experimental, please contact us if you want to use it.
 
 ### Port
 
