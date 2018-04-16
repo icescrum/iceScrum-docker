@@ -23,8 +23,6 @@ The environment variable to do so is ICESCRUM_HTTPS_PROXY:
 
 That is the only thing you have to do on the iceScrum side. However, you need to configure the reverse proxy properly so it works with iceScrum, as explained in the documentation provided on our website.
 
-As an alternative, you could define the HTTPS connection directly on the .jar, thus avoiding the need to install a reverse proxy. This feature is still experimental, please contact us if you want to use it.
-
 ### Port
 
 Internally, iceScrum will start on port `8080`. You need to map this internal port to a port of your computer in order to use iceScrum from your computer.
