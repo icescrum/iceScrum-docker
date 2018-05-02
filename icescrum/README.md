@@ -168,8 +168,7 @@ services:
     environment:
       - MYSQL_DATABASE=icescrum
       - MYSQL_ROOT_PASSWORD=myPass
-    command:
-      --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
   icescrum:
     image: icescrum/icescrum
     volumes:
