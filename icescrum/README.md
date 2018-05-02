@@ -181,19 +181,19 @@ services:
 
 ## Examples
 
-__Start MySQL and iceScrum on a new `mynet` Docker network on URL http://<docker-host>:8080/icescrum__
+__Start MySQL and iceScrum on a new `mynet` Docker network on URL http://docker-host:8080/icescrum__
 ```console
 docker network create --driver bridge mynet
 docker run --name mysql    -v ~/docker-is/mysql:/var/lib/mysql --net=mynet -e MYSQL_DATABASE=icescrum -e MYSQL_ROOT_PASSWORD=myPass -d icescrum/mysql     --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 docker run --name icescrum -v ~/docker-is/home:/root           --net=mynet -p 8080:8080                                                icescrum/icescrum
 ```
 
-__Start iceScrum with H2 on URL http://<docker-host>:8090/icescrum__
+__Start iceScrum with H2 on URL http://docker-host:8090/icescrum__
 ```console
 docker run --name icescrum -v ~/docker-is/home:/root -p 8090:8080 icescrum/icescrum
 ```
 
-__Start iceScrum with H2 on URL http://<docker-host>__
+__Start iceScrum with H2 on URL http://docker-host__
 ```console
 docker run --name icescrum -v ~/docker-is/home:/root -p 80:8080 -e ICESCRUM_CONTEXT=/ icescrum/icescrum
 ```
