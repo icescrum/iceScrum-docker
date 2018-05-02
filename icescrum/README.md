@@ -73,14 +73,14 @@ docker network create --driver bridge is_net
 
 #### MySQL
 
-The iceScrum MySQL image is just a standard MySQL image that creates an database named `icescrum` with the `utf8_general_ci` collation at the first startup.
+Use the official MySQL image.
 
-At first startup you will need to provide a password for the MySQL `root` user.
+Provide a password for the MySQL `root` user and a name for the database (you can use `icescrum`).
 ```
-docker run --name mysql -v /mycomputer/is/mysql:/var/lib/mysql --net=is_net -e MYSQL_ROOT_PASSWORD=myPass -d icescrum/mysql
+docker run --name mysql -v /mycomputer/is/mysql:/var/lib/mysql --net=is_net -e MYSQL_DATABASE=icescrum -e MYSQL_ROOT_PASSWORD=myPass -d mysql:5.7 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 ```
 
-MySQL data is persisted on your computer into `/mycomputer/is/mysql` (replace by an absolute or relative path from your computer). This may not work properly on `Docker Machine` due to permission issues unrelated to iceScrum.
+MySQL data is persisted on your computer into `/mycomputer/is/mysql` (replace by an absolute or relative path from your computer). This may not work properly on `Docker Machine` due to permission issues unrelated to iceScrum, see https://github.com/docker-library/mysql/issues/99.
 
 #### PostgreSQL
 
@@ -159,21 +159,24 @@ To migrate from one database to another:
 
 Here is an example docker-compose.yml file that starts iceScrum and MySQL
 ```yml
-version: '2'
+version: '3'
 services:
   mysql:
-    image: icescrum/mysql
+    image: mysql:5.7
     volumes:
       - /mycomputer/is/mysql:/var/lib/mysql
     environment:
+      - MYSQL_DATABASE=icescrum
       - MYSQL_ROOT_PASSWORD=myPass
+    command:
+      --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
   icescrum:
     image: icescrum/icescrum
-    ports:
-      - "8080:8080"
     volumes:
       - /mycomputer/is/home:/root
-    links:
+    ports:
+      - "8080:8080"
+    depends_on:
       - mysql
 ```
 
@@ -182,8 +185,8 @@ services:
 __Start MySQL and iceScrum on a new `mynet` Docker network on URL http://<docker-host>:8080/icescrum__
 ```console
 docker network create --driver bridge mynet
-docker run --name mysql    -v ~/docker-is/mysql:/var/lib/mysql    --net=mynet -e MYSQL_ROOT_PASSWORD=secretPass -d icescrum/mysql
-docker run --name icescrum -v ~/docker-is/home:/root              --net=mynet -p 8080:8080                         icescrum/icescrum
+docker run --name mysql    -v ~/docker-is/mysql:/var/lib/mysql    --net=mynet -e MYSQL_DATABASE=icescrum -e MYSQL_ROOT_PASSWORD=myPass -d icescrum/mysql     --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+docker run --name icescrum -v ~/docker-is/home:/root              --net=mynet -p 8080:8080                                                icescrum/icescrum
 ```
 
 __Start iceScrum with H2 on URL http://<docker-host>:8090/icescrum__

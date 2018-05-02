@@ -1,7 +1,9 @@
-# iceScrum MySQL Docker image
-
-This image is just a standard MySQL image that creates an database named `icescrum` with the `utf8_general_ci` collation at the first startup.
+# Deprecated
 
 iceScrum is an open-minded and expert agile project management tool based on the Scrum methodology: https://www.icescrum.com/features/.
 
-Please refer to the main iceScrum Docker image documentation to use it.
+This image is **deprecated**.
+
+Use iceScrum with the official docker image for `mysql`, as indicated in https://github.com/icescrum/iceScrum-docker/tree/master/icescrum.
+
+In case you have trouble with using the official `mysql` image with `docker-machine`, refer to https://github.com/docker-library/mysql/issues/99.
