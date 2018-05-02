@@ -73,7 +73,7 @@ docker network create --driver bridge is_net
 
 #### MySQL
 
-Use the official MySQL image.
+Use the official MySQL image (5.7)
 
 Provide a password for the MySQL `root` user and a name for the database (you can use `icescrum`).
 ```
@@ -84,12 +84,12 @@ MySQL data is persisted on your computer into `/mycomputer/is/mysql` (replace by
 
 #### PostgreSQL
 
-The iceScrum PostgreSQL image is just a standard PostgreSQL image that creates an `icescrum` database with the `en_US.UTF-8` encoding at the first startup.
+Use the official MySQL image (9.6).
 
-At first startup you will need to provide a password for the `postgre` user.
+Provide a password for the PostgreSQL `postgre` user and a name for the database (you can use `icescrum`).
 
 ```console
-docker run --name postgres -v /mycomputer/is/postgres:/var/lib/postgresql/data --net=is_net -e POSTGRES_PASSWORD=myPass -d icescrum/postgres
+docker run --name postgres -v /mycomputer/is/postgres:/var/lib/postgresql/data --net=is_net -e POSTGRES_DB=icescrum -e POSTGRES_PASSWORD=myPass -d postgres:9.6
 ```
 
 PostgreSQL data is persisted on your computer into `/mycomputer/is/postgres` (replace by an absolute or relative path from your computer). This may not work properly on `Docker Machine` due to permission issues unrelated to iceScrum.
