@@ -5,7 +5,7 @@ ENV JAVA_OPTS -Xmx1024m -Dicescrum.log.dir=/root/logs/ -Dicescrum.environment=do
 
 # Anything done in root cannot be done in Dockerfile since root will be mounted to a host directory at runtime
 COPY startup.sh /icescrum/startup.sh
-RUN chmod 755 /icescrum/startup.sh && sed -i 's/^assistive_technologies=/#&/' /etc/java-8-openjdk/accessibility.properties
+RUN chmod 755 /icescrum/startup.sh
 WORKDIR /icescrum
 ADD https://www.icescrum.com/downloads/v7/icescrum.jar /icescrum/icescrum.jar
 
