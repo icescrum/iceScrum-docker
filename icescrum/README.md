@@ -84,7 +84,7 @@ MySQL data is persisted on your computer into `/mycomputer/is/mysql` (replace by
 
 #### PostgreSQL
 
-Use the official MySQL image (9.6).
+Use the official PostgreSQL image (9.6).
 
 Provide a password for the PostgreSQL `postgre` user and a name for the database (you can use `icescrum`).
 
