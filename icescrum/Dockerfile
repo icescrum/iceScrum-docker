@@ -1,4 +1,4 @@
-FROM openjdk:8u212-jre
+FROM openjdk:8u222-jre
 MAINTAINER iceScrum Team <support@kagilum.com>
 
 ENV JAVA_OPTS -Xmx1024m -Dicescrum.log.dir=/root/logs/ -Dicescrum.environment=docker
