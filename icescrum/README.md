@@ -172,6 +172,10 @@ You will be told to restart the container at the very end of the setup so iceScr
 docker restart icescrum
 ```
 
+## Update iceScrum
+
+Follow the upgrade guide: https://www.icescrum.com/documentation/upgrade-guide/.
+
 ## Switch database
 
 To migrate from one database to another:
