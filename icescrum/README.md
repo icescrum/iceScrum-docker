@@ -61,9 +61,9 @@ Be careful, the H2 default embedded DBMS __is not reliable for production use__,
 
 The connection between iceScrum and a DBMS started in another container requires either `Docker compose` or Docker Networks (see the dedicated section). 
 
-Starting both containers with docker compose ensures that they are both properly configured and started and allows iceScrum to access your MySQL or PostgreSQL container by its name (thanks to an automatic `/etc/hosts` entry).
+Starting both containers with `Docker compose` ensures that they are both properly configured and started and allows iceScrum to access your MySQL or PostgreSQL container by its name (thanks to an automatic `/etc/hosts` entry).
 
-Here is an example docker-compose.yml file that starts iceScrum and MySQL
+Here is an example `docker-compose.yml` file that starts iceScrum and MySQL
 ```yml
 version: '3'
 services:
