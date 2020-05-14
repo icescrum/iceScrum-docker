@@ -63,7 +63,7 @@ The connection between iceScrum and a DBMS started in another container requires
 
 Starting both containers with `Docker compose` ensures that they are both properly configured and started and allows iceScrum to access your MySQL or PostgreSQL container by its name (thanks to an automatic `/etc/hosts` entry).
 
-Use the official MySQL image (5.7 is recommended as version 8 is not supported yet) or the official PostgreSQL image (`9.6` up to `11` as version 12 is not supported yet).
+Use the official MySQL image (`5.7 is recommended as version 8 is not supported yet) or the official PostgreSQL image (`9.6` up to `11` as version 12 is not supported yet).
 
 Here is an example `docker-compose.yml` file that starts iceScrum and MySQL
 ```yml
