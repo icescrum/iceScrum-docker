@@ -8,5 +8,6 @@ COPY startup.sh /icescrum/startup.sh
 RUN chmod 755 /icescrum/startup.sh
 WORKDIR /icescrum
 ADD https://www.icescrum.com/downloads/v7/icescrum.jar /icescrum/icescrum.jar
+EXPOSE 8080
 
 CMD ./startup.sh
