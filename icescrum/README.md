@@ -25,7 +25,7 @@ That is the only thing you have to do on the iceScrum side. However, you need to
 
 ### Port
 
-Internally, iceScrum will start on port `8080`. You need to map this internal port to a port of your computer in order to use iceScrum from your computer.
+Internally, iceScrum will start on port `8080`. This port is exposed to other Docker containers on the same network. However, you need to map this internal port to a port of your computer in order to use iceScrum from your computer.
 
 To map a port when starting a Docker container: add `-p external-port:internal-port` to the `docker run` command.
 
