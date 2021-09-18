@@ -1,13 +1,16 @@
-FROM openjdk:8u222-jre
-MAINTAINER iceScrum Team <support@kagilum.com>
+FROM openjdk:8u302-jre
 
-ENV JAVA_OPTS -Xmx1024m -Dicescrum.log.dir=/root/logs/ -Dicescrum.environment=docker
+RUN useradd -ms /bin/bash icescrum && mkdir /opt/icescrum
 
-# Anything done in root cannot be done in Dockerfile since root will be mounted to a host directory at runtime
-COPY startup.sh /icescrum/startup.sh
-RUN chmod 755 /icescrum/startup.sh
-WORKDIR /icescrum
-ADD https://www.icescrum.com/downloads/v7/icescrum.jar /icescrum/icescrum.jar
+COPY startup.sh /opt/icescrum/startup.sh
+ADD https://www.icescrum.com/downloads/v7/icescrum.jar /opt/icescrum/icescrum.jar
+
+RUN chown -R icescrum:icescrum /opt/icescrum \
+ && chown -R icescrum:icescrum /home/icescrum \
+ && chmod 755 /opt/icescrum/startup.sh
+
+USER icescrum
+WORKDIR /opt/icescrum
 EXPOSE 8080
 
-CMD ./startup.sh
+CMD ["./startup.sh"]
