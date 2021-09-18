@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -d "/root/icescrum/lbdsl" ]; then
+if [ -d "/home/icescrum/icescrum/lbdsl" ]; then
     echo "------------------------------------------------------------
 ERROR: the iceScrum v7 container has detected that you attempt to run it on an existing R6 volume. This will not work!
  - If you want to start new projects or evaluate this new version, the best solution consists in mounting this container on a new volume.
@@ -9,22 +9,25 @@ ERROR: the iceScrum v7 container has detected that you attempt to run it on an e
  - Be careful, you cannot connect a v7 container to a R6 database!
 ------------------------------------------------------------"
 else
-    mkdir -p /root/logs /root/.icescrum
+    mkdir -p /home/icescrum/logs /home/icescrum/.icescrum
 
-    config_file="/root/.icescrum/config.groovy"
+    config_file="/home/icescrum/.icescrum/config.groovy"
     if [ ! -f "$config_file" ]; then
-        mkdir -p /root/h2
-        echo "dataSource.url = 'jdbc:h2:/root/h2/prodDb'" >> "$config_file"
+        mkdir -p /home/icescrum/h2
+        echo "dataSource.url = 'jdbc:h2:/home/icescrum/h2/prodDb'" >> "$config_file"
     fi
 
-    log_file="/root/logs/catalina.out"
+    log_file="/home/icescrum/logs/catalina.out"
     if [ ! -f "$log_file" ]; then
         touch "$log_file"
     fi
 
-    if [ -z "$ICESCRUM_CONTEXT" ]; then context="icescrum"; else context="$ICESCRUM_CONTEXT"; fi
-    if [ "$ICESCRUM_HTTPS_PROXY" == "true" ]; then httpsProxy="httpsProxy=true"; else httpsProxy=""; fi
+    if [ "${ICESCRUM_HTTPS_PROXY}" == "true" ]; then httpsProxy="true"; else httpsProxy="false"; fi
 
-    java -jar $JAVA_OPTS icescrum.jar host=localhost context=$context $httpsProxy >> $log_file 2>&1 &
-    tail -n0 -f $log_file
+    java -jar icescrum.jar \
+      host="localhost" \
+      context="${ICESCRUM_CONTEXT:-icescrum}" \
+      httpsProxy="${httpsProxy}" \
+        >> "${log_file}" 2>&1 &
+    tail -n0 -f "${log_file}"
 fi
