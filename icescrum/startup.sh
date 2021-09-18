@@ -22,9 +22,12 @@ else
         touch "$log_file"
     fi
 
-    if [ -z "${ICESCRUM_CONTEXT}" ]; then context="icescrum"; else context="${ICESCRUM_CONTEXT}"; fi
-    if [ "${ICESCRUM_HTTPS_PROXY}" == "true" ]; then httpsProxy="httpsProxy=true"; else httpsProxy=""; fi
+    if [ "${ICESCRUM_HTTPS_PROXY}" == "true" ]; then httpsProxy="true"; else httpsProxy="false"; fi
 
-    java -jar icescrum.jar host="localhost" context="${context}" "${httpsProxy}" >> "${log_file}" 2>&1 &
+    java -jar icescrum.jar \
+      host="localhost" \
+      context="${ICESCRUM_CONTEXT:-icescrum}" \
+      httpsProxy="${httpsProxy}" \
+        >> "${log_file}" 2>&1 &
     tail -n0 -f "${log_file}"
 fi
